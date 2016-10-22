@@ -15,7 +15,7 @@
 		var/turf/U = (istype(target, /atom/movable) ? target.loc : target)
 		//var/turf/T = get_turf(target)
 		if (A.activated)
-			if (A.can_teleport_here(U))
+			if (A.can_teleport_here(U, user))
 				A.effect_click_tile(src,user,U)
 			else
 				boutput(user, "<b>[src]</b> [A.error_phrase]")
@@ -68,7 +68,9 @@
 		particleMaster.SpawnSystem(new /datum/particleSystem/tele_wand(T,particle_sprite,particle_color))
 		return
 
-	proc/can_teleport_here(var/turf/T)
+	proc/can_teleport_here(var/turf/T,var/mob/user)
+		if (get_dist(artifact, user) < 7)
+			return 0
 		if (!istype(T,/turf/simulated/floor/))
 			return 0
 		if (T.density)
