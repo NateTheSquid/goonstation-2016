@@ -14,6 +14,18 @@ var/suicide_list = new/list()
 	src.suiciding = 1
 	src.unlock_medal("Damned", 1)
 
+	var/W = src.equipped()
+	if (istype(W,/obj/item/reagent_containers/food/snacks/donut))
+		src.u_equip(W)
+		qdel(W)
+		src.update_inhands()
+		src.visible_message("<span style=\"color:red\"><b>[src] accidentally inhales \his donut! It looks like \he's suffocating.</b></span>")
+		src.take_oxygen_deprivation(175)
+		src.updatehealth()
+		spawn(200) //in case they get revived by cryo chamber or something stupid like that, let them suicide again in 20 seconds
+			src.suiciding = 0
+		return
+	
 	//i'll just chuck this one in here i guess
 	if (src.on_chair)
 		src.visible_message("<span style=\"color:red\"><b>[src] jumps off of the chair straight onto \his head!</b></span>")
